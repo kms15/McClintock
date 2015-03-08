@@ -81,9 +81,9 @@ function elbowLocation(angles) = [
         [0, 0, _elbowLocationZ(angles[2])]
 ];
 
-// shrinks the distance to the z axis by the shoulder radius for each of the elbow
+// shrinks the distance to the z axis by the wrist radius for each of the elbow
 // points
-function contractElbowsAroundZ(p) = p - shoulderRadius*[
+function contractElbowsAroundZ(p) = p - wristRadius*[
     [0,1,0], [-sin(120),cos(120),0], [sin(120),cos(120),0]
 ];
 
