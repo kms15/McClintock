@@ -1,0 +1,2 @@
+This file records changes made to the design and documentation (see
+section 3.4b of the license):

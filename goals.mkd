@@ -1,0 +1,69 @@
+# Project Goals
+
+The primary goals of this design are accessibility and openness.  As the DIY 3D
+printing world has progressed, it's popularity has grown and the skills and
+time commitment required to build a printer have steadily dropped.  This design
+is an attempt to continue that trend of greater accessibility.  As that
+community has grown, it has also remained creative and vibrant due to the free
+and open exchange of ideas and designs, such that no one is in a position to
+prevent another person from building and improving on a good idea.  This
+printer is intended to contribute to this growing open-hardware ecosystem.
+
+To pursue these abstract goals, it is useful to set a few specific, measurable
+goals to test our success in a more rigorous fashion.  In terms of
+accessibility, one of the first barriers people often encounter is that they
+have not seen a 3D printer first hand, and thus their imagination hasn't really
+been primed for noticing ways they might use such a tool.  To address this, the
+printer should be easy to share with friends and family, so that you can easily
+bring it along when visiting your 11 year old niece or nephew or your friend
+who is an artist or maker.  This gives us our first goal:
+
+  - *Goal 1*: The printer should be able to be disassembled and packed in a
+    typical airline carry-on bag in less than 5 minutes, and then reassembled in
+    less than 5 minutes (all by an expert, meaning someone with considerable
+    experience with this particular printer design).
+
+One of the second barriers that people encounter once they know about 3D printing
+is the time investment required to build a printer.  It typically takes tens of
+hours to build one's first printer, and than an equal amount of time to tune it
+to produce reasonably accurate prints.  If an enthusiast could make the offer
+of "give me a weekend and we'll build a printer", many more people might be
+willing to start dabbling with building printers and printing objects.  This
+gives us our next set of goals:
+
+  - *Goal 2*: A novice (someone who has not built a 3D printer or similar device
+    before) with guidance from an expert (but not hands-on help) should be able
+    to assemble the printer in a single day from a set of printed parts and
+    hardware that can be easily ordered.
+  - *Goal 3*: A novice (again with guidance) should be able to calibrate their
+    newly built printer in a single day well enough to print out the printed
+    parts to build another printer of equal quality.
+
+In order to not waste the time and enthusiasm of novices, we set some goals
+that an expert can test.  In particular, we use the assumption (from an old
+physics professor) that a novice will take about four times longer than an
+expert to complete a task.
+
+  - *Goal 4*: An expert should be able to build the printer from parts in 2-3
+    hours.
+  - *Goal 5*: In 2-3 hours, an expert should be able to calibrate the printer
+    well enough to print parts for a second printer of equal quality.
+
+In order to maintain the the openness and ease of modification and improvement
+that has characterized much of the hardware in the 3D printer movement, we also
+set the following goals:
+
+  - *Goal 6*: All original designs should be available under an open-hardware
+    license.
+  - *Goal 7*: All original designs should be able to be viewed, modified, and
+    printed with freely available open-source software.
+  - *Goal 8*: All components required to build the printer should be able to be
+    sourced from multiple manufacturers.
+
+Note that each of these goals are testable and can be documented in a way that
+can be verified by a third party (making it hard to deceive oneself about the
+success of one's endeavor).  For simplicity of testing, we will interpret the
+goals 2 and 3 as having been achieved if at least one novice is able to do so
+at least once (and not tackle the more difficult measurement of a typical
+attempt of a typical novice).  Similarly a single success by an expert will be
+considered sufficient to satisfy goals 1, 4, and 5.

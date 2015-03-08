@@ -1,0 +1,21 @@
+# McClintock 3D Printer
+
+The McClintock is a 3D printer (using fused-filament fabrication) that is
+currently in the early stages of development.  You are welcome to use anything
+here you find useful under the terms of the [CERN Open Hardware License, v.1.2
+or later](http://ohwr.org/cernohl).
+
+
+## Project Goals
+
+The primary goals of this design are accessibility and openness.  More
+details and specific, testable, goals can be found in the document goals.mkd.
+
+
+## About the name
+
+There is a tradition of naming 3D printers in the reprap/open hardware
+community after notable geneticists.  This printer design is named after
+[Barbara McClintock](https://en.wikipedia.org/wiki/Barbara_McClintock) who won
+the Nobel Prize for discovering and describing transposons, along with being
+one of the early pioneers in genetic regulation.
