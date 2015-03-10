@@ -19,7 +19,7 @@ distalArmLength = 288;
 standHeight = 400;
 
 // diameter of the printing bed
-bedRadius = 175;
+bedRadius = 150;
 
 //
 // utility functions
@@ -30,6 +30,7 @@ function normSquared(v) = v[0]*v[0] + v[1]*v[1] + v[2]*v[2];
 
 // these functions are built into later versions of openscad
 function norm_(v) = sqrt(normSquared(v));
+function dot_(v1, v2) = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 function cross_(v1, v2) = [
     v1[1] * v2[2] - v2[1] * v1[2],
     v1[2] * v2[0] - v2[2] * v1[0],
@@ -92,6 +93,70 @@ function contractElbowsAroundZ(p) = p - wristRadius*[
 function effectorPosition(angles) = sphereCenter(distalArmLength,
     contractElbowsAroundZ(elbowLocation(angles)));
 
+// calculate the angle between the point of intersection between two circles
+// (of radius r and R), the center of the circle of radius r, and the line
+// connecting the centers of the two circles.
+function circleIntersectionAngle(r, R, d) = acos(
+    (d + (r*r - R*R) / d) /(2 * r));
+
+// calculate the radius of the circle formed by a sphere of radius R centered
+// at point o intersecting the plane described by the point p and normal v.
+function radiusOfSpherePlaneIntersection(R, o, p, v) = sqrt(
+    R*R - dot_(o - p, v) * dot_(o - p, v)
+);
+
+// calculate the point on the plane described by the point p and normal v that
+// is closest to the point o.
+function nearestPointOnPlane(o, p, v) = (
+    o - v * dot_(o - p, v)
+);
+
+// calculate the angle between v1 and v2 with the unit vector a (at a right
+// angle to both) defining positive angles via the right hand rule.
+function angleBetweenVectors(v1, v2, a=[0,0,1]) = asin(dot_(a,
+    cross_(v1, v2) / (norm_(v1) * norm_(v2))));
+
+// calculate the angle of the shoulder joint at position s with axis a and
+// zero degree vector v given the position of the wrist at w.
+function singleArmAngle(s, a, v, w) = (
+    circleIntersectionAngle(proximalArmLength,
+        radiusOfSpherePlaneIntersection(distalArmLength, w, s, a),
+        norm_(s - nearestPointOnPlane(w, s, a))
+    ) +
+    angleBetweenVectors(
+        nearestPointOnPlane(w, s, a) - s,
+        v,
+        a
+    )
+);
+
+// calculate the arm angles from the position of the effector (in body
+// coordinates).
+function armAngles(p) = [
+    singleArmAngle(
+        shoulderRadius * [0, 1, 0],
+        [-1, 0, 0],
+        [0, 0, -1],
+        p + wristRadius * [0, 1, 0]
+    ),
+    singleArmAngle(
+        shoulderRadius * [sin(120), cos(120), 0],
+        [-cos(120), -sin(120), 0],
+        [0, 0, -1],
+        p + wristRadius * [sin(120), cos(120), 0]
+    ),
+    singleArmAngle(
+        shoulderRadius * [-sin(120), cos(120), 0],
+        [-cos(120), sin(120), 0],
+        [0, 0, -1],
+        p + wristRadius * [-sin(120), cos(120), 0]
+    )
+];
+
+//echo(angleBetweenVectors([1,0,0], [0,1,0], [0, 0, -1]));
+//echo(singleArmAngle([150,0,0], [0,1,0], [0, 0, -1], [0,-200,-400]));
+//echo(armAngles([200, 0, -400]));
+echo(nearestPointOnPlane([200, 0, -400], [0, 0, 100], [0, 0, 1]));
 
 //
 // main components of the robot
@@ -177,12 +242,20 @@ module arms(angles) {
     translate(effectorPosition(angles))
         effector();
 }
-echo(atan2(1,1));
+
+target = bedRadius * [0, 0, -2] +
+    cos(10*360*$t) * bedRadius * [0, 1/1.41, -1/1.41] +
+    sin(10*360*$t) * bedRadius * [1, 0, 0] +
+    (sin(1*360*$t) * 100 - 50) * [0, 1/1.41, 1/1.41];
+
 
 translate([-bedRadius, -bedRadius])
     bed();
 stand();
 translate([0, 0, standHeight]) rotate([0,0,135]) rotate([45,0,0]) {
+    color([0.75, 0, 0.75])
+        translate(target)
+        sphere(r=20);
     body();
-    arms([45 + 45*sin(360*2*$t),45+45*sin(360*3*$t),45+45*sin(360*5*$t)]);
+    arms(armAngles(target));
 }
