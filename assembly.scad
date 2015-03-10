@@ -111,7 +111,7 @@ module stand() {
 // shoulder axes oriented so the origin of the first arm is on the positive
 // y-axis and the effector side of the printer is facing downwards.
 module body() {
-    cylinder(r=80, h=distalArmLength);
+    cylinder(r=shoulderRadius+40, h=60);
 }
 
 // Upper arm of the robot, origin is at the shoulder oriented so that the
@@ -122,19 +122,22 @@ module proximalArm() {
         cylinder(r=3, h=proximalArmLength);
     translate([10,0,0])
         cylinder(r=3, h=proximalArmLength);
+    translate([0, 0, proximalArmLength])
+        rotate([0,90,0])
+        translate([0, 0, -20])
+        cylinder(r=4, h=40);
 }
 
 // lower arm of the robot, origin is at the elbow oriented so that the
 // the x-axis is the axis of rotation and the arm extends along the positive
 // z axis.
-module distalArm() {
-    cylinder(r=3, h=distalArmLength);
-    /*
-    translate([-15,0,0])
-        cylinder(r=6, h=distalArmLength);
-    translate([15,0,0])
-        cylinder(r=6, h=distalArmLength);
-    */
+module distalArm(xAngle = 0, zAngle = 0) {
+    translate([-20,0,0])
+        rotate([xAngle, 0, zAngle])
+        cylinder(r=3, h=distalArmLength);
+    translate([20,0,0])
+        rotate([xAngle, 0, zAngle])
+        cylinder(r=3, h=distalArmLength);
 }
 
 // effector of the robot.  Origin is at the center of the wrist axes with the
@@ -157,17 +160,19 @@ module arms(angles) {
             rotate([angles[i] - 180, 0, 0])
             proximalArm();
         translate(elbowLocation(angles)[i])
-            //rotate([0, 0, 120*i])
-            rotate([0, 0, -90 + atan2(
-                (contractElbowsAroundZ(elbowLocation(angles))[i] -
-                    effectorPosition(angles))[1],
-                (contractElbowsAroundZ(elbowLocation(angles))[i] -
-                    effectorPosition(angles))[0]
-                )])
-            rotate([180 - acos(
-                (elbowLocation(angles)[i] - effectorPosition(angles))[2] /
-                distalArmLength),0,0])
-            distalArm();
+            rotate([0, 0, 120*i])
+            distalArm(
+                180 - acos(
+                    (elbowLocation(angles)[i] - effectorPosition(angles))[2] /
+                    distalArmLength
+                ),
+                -90 + atan2(
+                    (contractElbowsAroundZ(elbowLocation(angles))[i] -
+                        effectorPosition(angles))[1],
+                    (contractElbowsAroundZ(elbowLocation(angles))[i] -
+                        effectorPosition(angles))[0]
+                ) - 120*i
+            );
     }
     translate(effectorPosition(angles))
         effector();
