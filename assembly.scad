@@ -1,3 +1,7 @@
+include <miscHardware.scad>
+
+$fn=30;
+
 //
 // basic measurements of the robot
 //
@@ -13,6 +17,9 @@ proximalArmLength = 250;
 
 // axis to axis length of the lower armature
 distalArmLength = 288;
+
+// width of the gap between the rod ends on the distal arm
+distalArmGap = 30;
 
 // height of center of the plane containing the stepper motors above the
 // ground.
@@ -189,27 +196,42 @@ module proximalArm() {
         cylinder(r=3, h=proximalArmLength);
     translate([0, 0, proximalArmLength])
         rotate([0,90,0])
-        translate([0, 0, -20])
-        cylinder(r=4, h=40);
+        translate([0, 0, -distalArmGap/2])
+        cylinder(r=3, h=distalArmGap);
 }
 
 // lower arm of the robot, origin is at the elbow oriented so that the
 // the x-axis is the axis of rotation and the arm extends along the positive
 // z axis.
 module distalArm(xAngle = 0, zAngle = 0) {
-    translate([-20,0,0])
-        rotate([xAngle, 0, zAngle])
-        cylinder(r=3, h=distalArmLength);
-    translate([20,0,0])
-        rotate([xAngle, 0, zAngle])
-        cylinder(r=3, h=distalArmLength);
+    for (xoffset = ([-1/2, 1/2] * (distalArmGap + traxxas5347HornWidth))) {
+        translate([xoffset, 0, 0])
+            rotate([0, 0, zAngle])
+            rotate([xAngle, 0, 0])
+            {
+                rotate([180, 0, 0])
+                    translate([0, 0, -traxxas5347BallHeight])
+                    traxxas5347RodEnd(xAngle, 180 - zAngle);
+                color([0.5, 0.5, 0.5])
+                    translate([0, 0, traxxas5347BallHeight])
+                    cylinder(r=3, h=distalArmLength - 2*traxxas5347BallHeight);
+                translate([0, 0, distalArmLength - traxxas5347BallHeight])
+                    traxxas5347RodEnd(xAngle, zAngle);
+            }
+    }
 }
 
 // effector of the robot.  Origin is at the center of the wrist axes with the
 // axis connected to the first arm on the y axis.
 module effector() {
     translate([0,0,-5])
-        cylinder(r=wristRadius, h=10);
+        cylinder(r=wristRadius-3, h=10);
+        for (zRot = [0, 120, 240]) {
+            rotate([0, 0, zRot])
+                translate([-distalArmGap/2, wristRadius, 0])
+                rotate([0, 90, 0])
+                cylinder(r=3, h=distalArmGap);
+        }
 }
 
 // draws the arms at the given shoulder angles.  Origin is at the center of the
