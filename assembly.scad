@@ -1,6 +1,6 @@
 include <miscHardware.scad>
 
-$fn=30;
+$fn=60;
 
 //
 // basic measurements of the robot
@@ -183,7 +183,15 @@ module stand() {
 // shoulder axes oriented so the origin of the first arm is on the positive
 // y-axis and the effector side of the printer is facing downwards.
 module body() {
-    cylinder(r=shoulderRadius+40, h=60);
+    for (i = [0:2]) {
+        rotate([0, 0, 120*i])
+            rotate([0, 90, 0])
+            translate([0, shoulderRadius, -20]) {
+                gearedStepperMotor();
+                translate([-20, -shoulderRadius * 1.6, 0])
+                    cube([40, 20 + shoulderRadius * 1.6, 5]);
+            }
+    }
 }
 
 // Upper arm of the robot, origin is at the shoulder oriented so that the
