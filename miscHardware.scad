@@ -126,11 +126,11 @@ module gearedStepperMotor() {
     difference() {
         // the shaft
         cylinder(r=stepperShaftDiameter/2,
-            h=stepperShaftFlatLength + stepperShaftKeepoutLength);
+            h=stepperShaftFlatLength + stepperShaftFlatOffset);
 
         // the flat
         translate([-stepperShaftDiameter/2 - overcut, 3,
-                stepperShaftKeepoutLength])
+                stepperShaftFlatOffset])
             cube([2*stepperShaftDiameter/2 + 2*overcut,
                 stepperShaftFlatDepth + overcut,
                 stepperShaftFlatLength + overcut]);
@@ -139,7 +139,7 @@ module gearedStepperMotor() {
     // the gearbox
     color([0.85, 0.85, 0.85]) {
         // the little ring extending up around the shaft
-        cylinder(r=stepperShaftKeepoutDiameter/2, h=2);
+        cylinder(r=stepperShaftKeepoutDiameter/2, h=stepperShaftKeepoutLength);
 
         // the main cylindrical body of the gearbox
         difference() {
