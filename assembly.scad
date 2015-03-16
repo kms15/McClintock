@@ -1,32 +1,14 @@
-include <miscHardware.scad>
+include <dimensions.scad>
+include <miscHardwareDimensions.scad>
+use <miscHardware.scad>
+use <bodyFrame.scad>
 
 $fn=60;
 
-//
-// basic measurements of the robot
-//
-
-// radius of a circle tangent to the axes of the upper stepper motors
-shoulderRadius = 50;
-
-// radius of a circle tangent to the axes of rotation around the effector
-wristRadius = 50;
-
-// axis to axis length of the upper armature
-proximalArmLength = 250;
-
-// axis to axis length of the lower armature
-distalArmLength = 288;
-
-// width of the gap between the rod ends on the distal arm
-distalArmGap = 30;
-
-// height of center of the plane containing the stepper motors above the
-// ground.
-standHeight = 400;
-
-// diameter of the printing bed
-bedRadius = 150;
+module printedMaterial() {
+    for (i = [0 : $children-1])
+        color([0.5,0.5,1.0]) child(i);
+}
 
 //
 // utility functions
@@ -183,13 +165,16 @@ module stand() {
 // shoulder axes oriented so the origin of the first arm is on the positive
 // y-axis and the effector side of the printer is facing downwards.
 module body() {
+    printedMaterial()
+        bodyFrame();
+
     for (i = [0:2]) {
         rotate([0, 0, 120*i])
             rotate([0, 90, 0])
             translate([0, shoulderRadius, -20]) {
                 gearedStepperMotor();
-                translate([-20, -shoulderRadius * 1.6, 0])
-                    cube([40, 20 + shoulderRadius * 1.6, 5]);
+                //translate([-20, -shoulderRadius * 1.6, 0])
+                //    cube([40, 20 + shoulderRadius * 1.6, 5]);
             }
     }
 }
