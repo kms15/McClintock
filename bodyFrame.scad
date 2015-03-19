@@ -54,9 +54,9 @@ module bodyFrame() {
                     h=(1 - sqrt(2)/2) * height + overcut);
 
             // clear out the upper shoulder on the mounting cylinder
-            translate([0, 0, sqrt(2)*(height/2 - postDiameter/2 -
+            translate([0, 0, overcut + sqrt(2)*(height/2 - postDiameter/2 -
                     clearance/2 - wallThickness/2)])
-                cylinder(r=postDiameter/2 + wallThickness + clearance,
+                cylinder(r=postDiameter/2 + wallThickness + clearance/2,
                     h=height + overcut);
         }
 
@@ -70,7 +70,11 @@ module bodyFrame() {
                 translate([-offset - overcut, shoulderRadius, 0])
                 rotate([0, 90, 0]) {
                     // cut out the keep-out for the stepper
-                    cylinder(r=stepperShaftKeepoutDiameter/2 + clearance,
+                    cylinder(
+                        r=max(stepperShaftKeepoutDiameter/2 + clearance/2,
+                            stepperInnerMountingHoleRingDiameter/2 -
+                                stepperMountingScrewDiameter/2 - clearance/2
+                                - minWallThickness),
                         h=stepperShaftKeepoutLength + overcut);
 
                     // cut out for the stepper shaft (and retaining ring)
