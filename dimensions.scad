@@ -28,5 +28,7 @@ bedRadius = 150;
 overcut = 1;
 
 // clearance around holes
-clearance=1;
+clearance=1.25;
 
+// Minimum printable wall thickness (for support while printing)
+minWallThickness = 0.5;

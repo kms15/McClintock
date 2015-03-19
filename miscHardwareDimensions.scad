@@ -22,3 +22,9 @@ gearboxFlangeDepth = 5;
 gearboxFlangeWidth = stepperBodyWidth - 2;
 silverBorderLength = 8;
 
+m3Diameter = 3;
+m3NutDiameter = 6;
+m3NutThickness = 2.4;
+m3SHCSHeadDiameter = 5.5;
+m3SHCSHeadHeight = 3;
+

@@ -8,6 +8,7 @@ centralTriangleWallLength = offset * 4/sqrt(3) + wallThickness/2;
 postDiameter=8;
 
 module bodyFrame() {
+    $fn = 30;
     difference() {
         union() {
             // mounting cylinder
@@ -15,7 +16,7 @@ module bodyFrame() {
                 translate([0, 0, -height * sqrt(2)/2])
                 cylinder(r=postDiameter/2 + clearance/2 + wallThickness,
                     h=sqrt(2)*(height - postDiameter/2
-                        - clearance/2 - wallThickness/2));
+                        - clearance/2 - wallThickness/2) + overcut);
 
             // the three radial walls
             for (i = [0:2]) {
@@ -69,7 +70,7 @@ module bodyFrame() {
                 translate([-offset - overcut, shoulderRadius, 0])
                 rotate([0, 90, 0]) {
                     // cut out the keep-out for the stepper
-                    cylinder(r=stepperShaftKeepoutDiameter/2 + clearance/2,
+                    cylinder(r=stepperShaftKeepoutDiameter/2 + clearance,
                         h=stepperShaftKeepoutLength + overcut);
 
                     // cut out for the stepper shaft (and retaining ring)
@@ -80,11 +81,21 @@ module bodyFrame() {
                     for (j = [0:3]) {
                         rotate([0, 0, j*90 + 45])
                             translate([0,
-                                stepperInnerMountingHoleRingDiameter/2,
-                                0])
-                            cylinder(r=stepperMountingScrewDiameter/2 +
-                                clearance/2,
-                                h=wallThickness + 2*overcut);
+                                    stepperInnerMountingHoleRingDiameter/2,
+                                    0]) {
+
+                                // the hole for the screw
+                                cylinder(r=stepperMountingScrewDiameter/2 +
+                                    clearance/2,
+                                    h=wallThickness + 2*overcut);
+
+                                // the counter-bored hole
+                                translate([0, 0, overcut + minWallThickness +
+                                    stepperShaftKeepoutLength])
+                                cylinder(r=m3SHCSHeadDiameter/2 +
+                                    clearance/2,
+                                    h=wallThickness);
+                            }
                     }
                 }
         }
