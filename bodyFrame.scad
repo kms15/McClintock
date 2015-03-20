@@ -8,7 +8,7 @@ centralTriangleWallLength = offset * 4/sqrt(3) + wallThickness/2;
 postDiameter=8;
 
 module bodyFrame() {
-    $fn = 30;
+    $fn = 60;
     difference() {
         union() {
             // mounting cylinder
@@ -71,7 +71,11 @@ module bodyFrame() {
                 rotate([0, 90, 0]) {
                     // cut out the keep-out for the stepper
                     cylinder(
-                        r=max(stepperShaftKeepoutDiameter/2 + clearance/2,
+                        r2=max(stepperShaftKeepoutDiameter/2 + clearance/2,
+                            stepperInnerMountingHoleRingDiameter/2 -
+                                stepperMountingScrewDiameter/2 - clearance/2
+                                - minWallThickness),
+                        r1=1+max(stepperShaftKeepoutDiameter/2 + clearance/2,
                             stepperInnerMountingHoleRingDiameter/2 -
                                 stepperMountingScrewDiameter/2 - clearance/2
                                 - minWallThickness),
