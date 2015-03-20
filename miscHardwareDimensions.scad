@@ -27,4 +27,4 @@ m3NutDiameter = 6;
 m3NutThickness = 2.4;
 m3SHCSHeadDiameter = 5.5;
 m3SHCSHeadHeight = 3;
-
+m3SHCSHexSize = 2.5;

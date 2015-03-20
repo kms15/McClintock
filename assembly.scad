@@ -171,10 +171,22 @@ module body() {
     for (i = [0:2]) {
         rotate([0, 0, 120*i])
             rotate([0, 90, 0])
-            translate([0, shoulderRadius, -20]) {
+            translate([0, shoulderRadius, -12.5]) {
                 gearedStepperMotor();
-                //translate([-20, -shoulderRadius * 1.6, 0])
-                //    cube([40, 20 + shoulderRadius * 1.6, 5]);
+
+                // mounting screws
+                for (j = [0:3]) {
+                    rotate([0, 0, j*90 + 45])
+                        translate([0,
+                                stepperInnerMountingHoleRingDiameter/2,
+                                0]) {
+
+                            // the counter-bored hole
+                            translate([0, 0, overcut + minWallThickness +
+                                stepperShaftKeepoutLength])
+                            m3SHCS();
+                        }
+                }
             }
     }
 }

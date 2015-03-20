@@ -1,5 +1,25 @@
 include <miscHardwareDimensions.scad>
 
+module hexPrism(w, h) {
+    $fn = 6;
+    cylinder(r=w/sqrt(3), h=m3SHCSHeadHeight);
+}
+
+// an m3 socket-headed cap screw of length l with the base of the head at the
+// origin and the body of the screw along the negative z axis.
+module m3SHCS(l=10) {
+    color([0.5, 0.5, 0.5])
+    difference() {
+        union() {
+            rotate([180,0,0])
+                cylinder(r=m3Diameter/2, h=l);
+            cylinder(r=m3SHCSHeadDiameter/2, h=m3SHCSHeadHeight);
+        }
+        translate([0,0,1])
+            hexPrism(w=m3SHCSHexSize, h=m3SHCSHeadHeight);
+    }
+}
+
 // a Traxxas 5347 rod end with the base at the origin, the ball on the positive
 // z axis, and the ball axis along the x-axis.
 module traxxas5347RodEnd(ballXAngle=0, ballZAngle=0) {
@@ -148,9 +168,9 @@ module gearedStepperMotor() {
                 cylinder(r=stepperGearboxDiameter/2,
                     stepperGearboxLength);
 
-            // the eight mounting holes
-            for (i = [0:7]) {
-                rotate([0, 0, i*45])
+            // the four mounting holes
+            for (i = [0:3]) {
+                rotate([0, 0, 45 + i*90])
                     translate([0, stepperInnerMountingHoleRingDiameter/2,
                         -mountingScrewDepth])
                     cylinder(r=stepperMountingScrewDiameter/2,
@@ -161,14 +181,14 @@ module gearedStepperMotor() {
             for (i = [0:3]) {
                 rotate([0, 0, i*90])
                 translate([0, stepperInnerMountingHoleRingDiameter/2,
-                        -1]) {
-                    cylinder(r=3, h=1 + overcut);
+                        -m3SHCSHeadHeight]) {
+                    cylinder(r=3, h=m3SHCSHeadHeight + overcut);
                     translate([-3,0,0])
                         cube([6, (
                                 stepperGearboxDiameter -
                                     stepperInnerMountingHoleRingDiameter
                             )/2 + overcut,
-                            1+overcut]);
+                            m3SHCSHeadHeight + overcut]);
                 }
             }
         }
@@ -185,14 +205,33 @@ module gearedStepperMotor() {
             scale(0.95)
                 stepperMotorBevel();
 
-            // the four screws attaching the flange
+            // counterbores for the four screws attaching the flange
             for (i = [0:3]) {
                 rotate([0, 0, i*90 + 45])
                 translate([0, stepperGearboxDiameter/2 + 3,
-                        -stepperGearboxLength + gearboxFlangeDepth - 1])
-                    cylinder(r=3, h=1 + overcut);
+                        -stepperGearboxLength + gearboxFlangeDepth -
+                        m3SHCSHeadHeight])
+                    cylinder(r=m3SHCSHeadDiameter/2 + 1/2,
+                        h=m3SHCSHeadHeight + overcut);
             }
         }
+    }
+
+    // the screws in the top of the gearbox
+    for (i = [0:3]) {
+        rotate([0, 0, i*90])
+            translate([0, stepperInnerMountingHoleRingDiameter/2,
+                -m3SHCSHeadHeight])
+            m3SHCS();
+    }
+
+    // the screws attaching the flange
+    for (i = [0:3]) {
+        rotate([0, 0, i*90 + 45])
+        translate([0, stepperGearboxDiameter/2 + 3,
+                -stepperGearboxLength + gearboxFlangeDepth -
+                m3SHCSHeadHeight])
+            m3SHCS();
     }
 
     // the silver top and bottom of the body of the stepper motor
@@ -228,5 +267,13 @@ module gearedStepperMotor() {
             // the beveling of the corners
             stepperMotorBevel();
         }
-}
 
+    // the white motor connector
+    plugWidth = 3;
+    plugHeight = 5;
+    plugLength = 10;
+    color([0.95, 0.95, 0.95])
+        translate([-plugLength/2, -stepperBodyWidth/2 - plugWidth,
+                -stepperGearboxLength - stepperBodyLength])
+        cube([plugLength, plugWidth, plugHeight]);
+}

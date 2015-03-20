@@ -1,7 +1,7 @@
 include <dimensions.scad>
 include <miscHardwareDimensions.scad>
 
-offset=stepperShaftKeepoutLength + stepperShaftFlatLength / 2;
+offset=stepperShaftFlatOffset + stepperShaftFlatLength / 2;
 height=40;
 wallThickness=5;
 centralTriangleWallLength = offset * 4/sqrt(3) + wallThickness/2;
