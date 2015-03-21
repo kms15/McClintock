@@ -129,16 +129,16 @@ function armAngles(p) = [
         p + wristRadius * [0, 1, 0]
     ),
     singleArmAngle(
-        shoulderRadius * [sin(120), cos(120), 0],
+        shoulderRadius * [-sin(120), cos(120), 0],
         [-cos(120), -sin(120), 0],
         [0, 0, -1],
-        p + wristRadius * [sin(120), cos(120), 0]
+        p + wristRadius * [-sin(120), cos(120), 0]
     ),
     singleArmAngle(
-        shoulderRadius * [-sin(120), cos(120), 0],
+        shoulderRadius * [sin(120), cos(120), 0],
         [-cos(120), sin(120), 0],
         [0, 0, -1],
-        p + wristRadius * [-sin(120), cos(120), 0]
+        p + wristRadius * [sin(120), cos(120), 0]
     )
 ];
 
