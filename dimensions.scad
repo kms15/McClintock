@@ -32,3 +32,7 @@ clearance=1.25;
 
 // Minimum printable wall thickness (for support while printing)
 minWallThickness = 0.5;
+
+// Dimensions of the tubes comprising the tripod stand
+tripodTubeDiameter = 16;
+tripodTubeLength = 330;
